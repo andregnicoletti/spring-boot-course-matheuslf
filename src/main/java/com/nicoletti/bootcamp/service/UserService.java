@@ -17,7 +17,7 @@ public class UserService {
 
     public User registrarUsuario(String username, String password){
         String senhaCrptografada = passwordEncoder.encode(password);
-        User user = new User(null, username, password);
+        User user = new User(null, username, senhaCrptografada);
         return userRepository.save(user);
     }
 
