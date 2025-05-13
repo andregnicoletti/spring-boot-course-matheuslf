@@ -1,8 +1,10 @@
 package com.nicoletti.bootcamp.controller;
 
+import com.nicoletti.bootcamp.exception.ResourceNotFoundException;
 import com.nicoletti.bootcamp.model.Product;
 import com.nicoletti.bootcamp.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,8 @@ public class ProductController {
 
     @GetMapping("/{id}")
     private ResponseEntity<Product> getProduct(@PathVariable Long id) {
-        return productService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Product product = productService.findById(id);
+        return ResponseEntity.ok(product);
     }
 
     @PostMapping
@@ -35,7 +36,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
-         productService.deleteProduct(id);
+        productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 }

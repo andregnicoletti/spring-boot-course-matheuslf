@@ -5,6 +5,7 @@ import com.nicoletti.bootcamp.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.module.ResolutionException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +19,9 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    public Product findById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(()-> new ResolutionException("Produto com ID " + id + " não encontrado."));
     }
 
     public Product saveProduct(Product product) {
@@ -27,6 +29,9 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        if(!productRepository.existsById(id)){
+            throw new ResolutionException("Produto com ID " + id + " não encontrado.");
+        }
         productRepository.deleteById(id);
     }
 }
